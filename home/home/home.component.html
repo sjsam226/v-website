@@ -1,0 +1,499 @@
+<!-- main pane -->
+<div class="mt-4">
+    <div class="container-fluid gedf-wrapper">
+        <div class="row">
+            <div class="col-2 mt-2 pr-1">
+                <!-- topic pane -->
+                <div class="leftpane shadow-card rounded">
+                    <h5 class="ml-2">Topics</h5>
+                    <div class="mt-2 ml-1" *ngFor="let TopicList of topicList">
+                        <div class="topicfont mt-2 h7 row"
+                            *ngIf="TopicList.topicId !=='8d2e69b6-77b2-4836-8c23-20efa363f055'">
+                            <span class="col-md-3 text-center">
+                                <i class="{{TopicList.topicIcon}} "></i>
+                            </span>
+                            <span class="col-md-9" style="margin-left: -17px;">
+                                <a (click)="navigateToTopicPage(TopicList.topic)" class="cursor text-dark">
+                                    <span style="font-size: 0.90rem"
+                                        title="{{TopicList.description}}">{{TopicList.topic}}</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- job carousel left -->
+                <div class="leftpaneJob shadow-card rounded" style="top: 375px">
+                    <!-- <h4 class="ml-2">Jobs</h4> -->
+                    <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="../assets/images/ad2.png" alt="First slide" style="width: 100%; height: 120px">
+                            </div>
+                            <div class="carousel-item">
+                                <div class="carousel-content col-10 col-centered">
+                                    <div>
+                                        <h4>#2</h4>
+                                        <div class="cc">This is a twitter bootstrap carousel that only uses text. There are no images in the carousel slides.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="carousel-content col-10 col-centered">
+                                    <div>
+                                        <h4>#3</h4>
+                                        <div class="cc">This is a twitter bootstrap carousel that only uses text. There are no images in the carousel slides.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div> -->
+                    <img src="../assets/images/adBanL.jpg" alt="First slide" style="width: 100%; height: 160px">
+                </div>
+            </div>
+            <!-- topic pane -->
+            <!-- middele pane -->
+            <div class="col-7 gedf-main">
+                <div class="row bg-white hide-element">
+                    <i class="fa fa-angle-double-left col-1 mt-4 text-muted"></i>
+                    <div class="scrollmenu mb-2 d-inline col-10 mt-1">
+                        <span *ngFor="let TopicList of topicList">
+                            <a class="answer-mobile cursor"
+                                *ngIf="TopicList.topicId !=='8d2e69b6-77b2-4836-8c23-20efa363f055'"
+                                (click)="navigateToTopicPage(TopicList.topic)">{{TopicList.topic}}</a>
+                        </span>
+                    </div>
+                    <i class="fa fa-angle-double-right text-muted col-1 mt-4"></i>
+                </div>
+                <div class="search-results" infiniteScroll [infiniteScrollDistance]="0.2" [infiniteScrollThrottle]="3"
+                    (scrolled)="onScrollDown()" [infiniteScrollUpDistance]="1">
+                    <div class="card gedf-card shadow-card" *ngFor="let QstDetail of qstList; let i = index">
+                        <!-- question -->
+                        <div class="card-header" style="background-color: #fcfcfc">
+                            <div class="row mr-2 justify-content-between">
+                                <div class="h7 text-muted ml-2"><b><a class="cursor"
+                                            (click)="navigateToTopicPage(QstDetail.topic)">{{QstDetail.topic}}</a></b>
+                                </div>
+                                <div class="text-muted">
+                                    <a class="h7 float-right cursor mr-1" (click)="follow(QstDetail) && onclickLogin() "
+                                        *ngIf="!isCA && !QstDetail.followed && userId !==QstDetail.userId"><i
+                                            class="fas fa-wifi"></i>
+                                        Follow {{QstDetail.followCount}}</a>
+                                    <a class="h7 float-right mr-1 text-info"
+                                        *ngIf="!isCA && QstDetail.followed === true && userId !==QstDetail.userId"><i
+                                            class="fas fa-wifi"></i>
+                                        Following {{QstDetail.followCount}}</a>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between ">
+                                    <div class="mr-2 mt-2" *ngIf="QstDetail.profileImg">
+                                        <img class="rounded-circle shadow-card" width="40" height="40"
+                                            src="{{QstDetail.profileImg}}" alt="">
+                                    </div>
+                                    <div class="mr-2 mt-2" *ngIf="!QstDetail.profileImg">
+                                        <img class="rounded-circle shadow-card" width="40" height="40"
+                                            src="../../assets/images/user-avatar.png" alt="">
+                                    </div>
+                                    <div class="mr-2">
+                                        <div class="mt-1 question-mobile" style="font-size:1.15rem"><a
+                                                [routerLink]="['/', QstDetail.questionParam ]" class="text-dark"
+                                                target="_blank">{{QstDetail.question}}</a>
+                                        </div>
+                                        <div class="h7 text-muted row mt-2 posted-On">
+                                            <div class="h7 ml-2">
+                                                <a (click)="navigateToUserPage(QstDetail.userParam)"
+                                                    class="text-success text-muted cursor">
+                                                    <b>
+                                                        <i class="fas fa-user-circle mr-1"></i>
+                                                    </b>
+                                                    {{QstDetail.userName}}</a>
+                                            </div>
+                                            <div class="ml-2" style="font-size:0.8rem">
+                                                <i class="far fa-clock"></i> Posted on
+                                                {{QstDetail.createdAt | date:'d/M/y'}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- question -->
+                            <!-- if no answer -->
+                            <div class="row justify-content-between posted-On p-1" *ngIf="!QstDetail.answer">
+                                <div>
+                                    <a class="ml-5 text-dark"><b>Be the first one to answer! </b></a>
+                                </div>
+                                <div class="h7 mr-4">
+                                    <a class="card-link text-muted cursor" data-toggle="collapse"
+                                        *ngIf="!isCA  && userId !==QstDetail.userId" (click)="onclickLogin()"
+                                        (click)="toggleAction(action = 'answer', QstDetail)"><i class="far fa-edit"></i>
+                                        Answer</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- if no answer -->
+
+                        <!-- if question had an answer -->
+                        <div class="card-body answered-on" *ngIf="QstDetail.answer">
+                            <div class="col-md-12 row " *ngIf="QstDetail.answer">
+                                <div class="h7 text-muted" style="font-size:0.8rem">
+                                    <a (click)="navigateToUserPage(QstDetail.answeredByUserParam)"
+                                        class="ml-1 text-success text-muted cursor"><b><i
+                                                class="fas fa-user-circle mr-1"></i></b>
+                                        {{QstDetail.answeredByName}} </a>
+                                    <i class="far fa-clock"></i>
+                                    <span *ngIf="QstDetail.answerRole === 'expert'" class="ml-1 mr-1"><b><mark
+                                                class="bg-dark text-white border-rounded">{{QstDetail.answerRole}}</mark></b>
+                                    </span>
+                                    Answered on {{QstDetail.answeredAt | date:'d/M/y'}}
+                                </div>
+                            </div>
+                            <!-- answer -->
+                            <div class="card-text">
+                                <div class="d-flex " *ngIf="QstDetail.answer">
+                                    <div class="mr-1 ml-2 mt-1 " *ngIf="QstDetail.answerProfileImg">
+                                        <img class="rounded-circle shadow-card" width="30" height="30"
+                                            src="{{QstDetail.answerProfileImg}}" alt="">
+                                    </div>
+                                    <div class="mr-1 ml-2 mt-1" *ngIf="!QstDetail.answerProfileImg">
+                                        <img class="rounded-circle shadow-card" width="30" height="30"
+                                            src="../../assets/images/user-avatar.png" alt="">
+                                    </div>
+                                    <div *ngIf="!QstDetail.answerImage && !QstDetail.answerVideo" class="mr-1 mb-2 answer-mobile row col">
+                                        <div class="mt-1 col-12" *ngIf="QstDetail.answer">
+                                            <div *ngIf="QstDetail.answer.length <= limit">
+                                                <span [innerHTML]="QstDetail.answer | safe: 'html'"></span>
+                                            </div>
+                                            <div *ngIf="!QstDetail.show && QstDetail.answer.length > limit">
+                                                <span class="d-inline"
+                                                    [innerHTML]="QstDetail.answer | truncate : limit"></span>
+                                                <button class="btn btn-link d-inline"
+                                                    (click)="showMoreToggle(QstDetail)">Show
+                                                    more</button>
+                                                    <!-- <a class="cursor btn btn-link text-success" (click)="navigateToQstPage(QstDetail)">Read More</a> -->
+                                            </div>
+                                            <div *ngIf="QstDetail.show === 'more' && QstDetail.answer.length > limit">
+                                                <span class="d-inline" [innerHTML]="QstDetail.answer | safe: 'html'"></span>
+                                                <!-- <button class="btn btn-link d-inline"
+                                                    (click)="showLessToggle(QstDetail)">Show
+                                                    less</button> -->
+                                                    <a class="cursor btn btn-link text-success" (click)="navigateToQstPage(QstDetail)">Read More Answers</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="QstDetail.answerImage || QstDetail.answerVideo"
+                                        class="mr-1 mb-2 answer-mobile row col">
+                                        <div class="mt-1 col-12" *ngIf="QstDetail.answer">
+                                            <div *ngIf="QstDetail.answer.length <= limit">
+                                                <a class="floatImage" data-toggle="modal" *ngIf="QstDetail.answerImage"
+                                                    href="#{{QstDetail.questionId}}-5"
+                                                    data-target="#{{QstDetail.questionId}}-5">
+                                                    <img class="rounded shadow-card cursor"
+                                                        src="{{QstDetail.answerImage}}">
+                                                </a>
+                                                <video class="floatImage rounded shadow-card" *ngIf="QstDetail.answerVideo" controls="controls">
+                                                    <source src="{{QstDetail.answerVideo}}" class="rounded shadow-card" type="video/mp4" />
+                                                </video>
+                                                <span [innerHTML]="QstDetail.answer | safe: 'html'"></span>
+                                            </div>
+                                            <div *ngIf="!QstDetail.show && QstDetail.answer.length > limit">
+                                                <a class="floatImage" data-toggle="modal" *ngIf="QstDetail.answerImage"
+                                                    href="#{{QstDetail.questionId}}-5"
+                                                    data-target="#{{QstDetail.questionId}}-5">
+                                                    <img class="rounded shadow-card cursor"
+                                                        src="{{QstDetail.answerImage}}">
+                                                </a>
+                                                <video class="floatImage rounded shadow-card" *ngIf="QstDetail.answerVideo" controls="controls">
+                                                    <source src="{{QstDetail.answerVideo}}" type="video/mp4" />
+                                                </video>
+                                                <span class="d-inline"
+                                                    [innerHTML]="QstDetail.answer | truncate : limit"></span>
+                                                <button class="btn btn-link d-inline"
+                                                    (click)="showMoreToggle(QstDetail)">Show
+                                                    more</button>
+                                                    <!-- <a class="cursor btn btn-link text-success" (click)="navigateToQstPage(QstDetail)">Read More</a> -->
+                                            </div>
+                                            <div *ngIf="QstDetail.show === 'more' && QstDetail.answer.length > limit">
+                                                <a class="floatImage" data-toggle="modal" *ngIf="QstDetail.answerImage"
+                                                    href="#{{QstDetail.questionId}}-5"
+                                                    data-target="#{{QstDetail.questionId}}-5">
+                                                    <img class="rounded shadow-card cursor"
+                                                        src="{{QstDetail.answerImage}}">
+                                                </a>
+                                                <video class="floatImage rounded shadow-card" *ngIf="QstDetail.answerVideo" controls="controls">
+                                                    <source src="{{QstDetail.answerVideo}}" type="video/mp4" />
+                                                </video>
+                                                <span class="d-inline" [innerHTML]="QstDetail.answer  | safe: 'html'"></span>
+                                                <!-- <button class="btn btn-link d-inline"
+                                                    (click)="showLessToggle(QstDetail)">Show
+                                                    less</button> -->
+                                                    <a class="cursor btn btn-link text-success" (click)="navigateToQstPage(QstDetail)">Read More Answers</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- image modal -->
+                        <div class="modal" id="{{QstDetail.questionId}}-5">
+                            <div class="modal-dialog">
+                                <button type="button" class="close ml-5 text-white"
+                                    data-dismiss="modal">&times;</button>
+                                <div class="d-flex justify-content-center">
+                                    <img class="rounded shadow-card cursor" style="height:32rem;width:40rem"
+                                        src="{{QstDetail.answerImage}}">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end image modal -->
+                        <!-- answer -->
+                        <!-- if question had an answer -->
+
+                        <!-- answer action -->
+
+                        <div class="card-footer bg-white" style="border:none;margin-top:-20px;"
+                            *ngIf="QstDetail.answer">
+                            <a class="card-link text-dark reduce-text-size cursor"
+                                *ngIf="!isCA && userId !== QstDetail.userId" data-toggle="collapse"
+                                 (click)="toggleAction(action = 'answer', QstDetail)" (click)="onclickLogin()"><i
+                                    class="far fa-edit icon"></i>
+                                <span class="hide-icons">Answer</span> {{QstDetail.answerCount}}</a>
+                            <!-- <a class="card-link text-dark reduce-text-size cursor"
+                                [routerLink]="['/', QstDetail.questionParam ]" target="_blank">
+                                <span class="hide-icons"><b>answers. {{QstDetail.answerCount}}</b></span></a> -->
+                            <a class="card-link text-dark cursor reduce-text-size"
+                                *ngIf="!isCA && !QstDetail.liked && QstDetail.answeredByUserId !== userId"
+                                (click)="like(QstDetail)"><i class="far fa-thumbs-up icon"></i>
+                                <span class="hide-icons">Like</span> {{QstDetail.likes}}</a>
+                            <a class="card-link text-info reduce-text-size" *ngIf="!isCA && QstDetail.liked === true"><i
+                                    class="far fa-thumbs-up icon"></i>
+                                <span class="hide-icons">Liked</span> {{QstDetail.likes}}</a>
+                            <a class="card-link text-dark reduce-text-size cursor" *ngIf="!isCA" data-toggle="collapse"
+                                (click)="toggleAction(action = 'comment', QstDetail)" (click)="getComment(QstDetail.answerId)"><i
+                                    class="far fa-comment icon"></i>
+                                <span class="hide-icons">Comment</span> {{QstDetail.commentsCount}}</a>
+                            <a class="card-link text-dark reduce-text-size cursor hide-element" *ngIf="!isCA"
+                                data-toggle="collapse"
+                                (click)="toggleAction(action = 'share', QstDetail)"  (click)="onclickLogin()"><i
+                                    class="fas fa-share-alt icon"></i>
+                                <span class="hide-icons ">Share</span></a>
+                            <div class="dropup card-link text-dark reduce-text-size cursor hide-icons">
+                                <a class="dropbtn">
+                                    <i class="fas fa-share-alt icon"></i> Share
+                                </a>
+                                <div class="dropup-content rounded shadow-card">
+                                    <div class="col-md-12 mt-2 mb-2 p-2 row justify-content-between rounded">
+                                        <a class="btn btn-link d-inline ml-4" (click)="shareOnFB(QstDetail)"><i
+                                                class="fab fa-facebook-f"></i></a>
+                                        <a class="btn btn-link d-inline" (click)="shareOntwitter(QstDetail)"><i
+                                                class="fab fa-twitter"></i>
+                                        </a>
+                                        <a class="btn btn-link d-inline" (click)="shareOnLinkedIn(QstDetail)"><i
+                                                class="fab fa-linkedin-in"></i></a>
+                                        <a class="btn btn-link d-inline text-dark"
+                                            href="mailto:?subject= Question on @VerwinCareers:&amp;body=Check out this question: {{QstDetail.question}}, Link: https://www.verwin.com/{{QstDetail.question}}/{{QstDetail.questionId}}"><i
+                                                class="far fa-envelope"></i>
+                                        </a>
+                                        <a class="btn btn-link d-inline text-dark hide-icons"
+                                            (click)="whatsappShare(QstDetail)" data-action="share/whatsapp/share"><i
+                                                class="fab fa-whatsapp"></i> </a>
+                                        <a class="btn btn-link d-inline text-dark" (click)="copyMessage(QstDetail)"
+                                            value="click to copy"><i class="fas fa-link"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <app-tiny-editor id="{{QstDetail.questionId}}" class="collapse hide mt-2"
+                            data-parent="#accordion"
+                            *ngIf="editor === QstDetail.questionId && isLoggedIn && loadComponent === true"
+                            [elementId]='QstDetail.questionId'>
+                        </app-tiny-editor>
+                        <!-- comment -->
+
+                        <div id="{{QstDetail.questionId}}-1" class="collapse hide" data-parent="#accordion"
+                            *ngIf="isLoggedIn">
+                            <div class="col-md-12 mt-2">
+                                <form #commentForm="ngForm" (ngSubmit)="comment(commentForm, QstDetail)"
+                                    class="row justify-content-center">
+                                    <input class="form-control col-9 inputCircle" placeholder="Add Comment" ngModel
+                                        name="comment">
+                                    <div class="col-1">
+                                        <button type="submit" class=" btn btn-success cursor rounded-circle"><i
+                                                class="far fa-comment icon text-white"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-12 mb-2 mt-1">
+                                <div *ngFor="let comments of commentData">
+                                    <div class="col-md-12 row" *ngIf="comments.answerId === QstDetail.answerId">
+                                        <div class="col-md-12 h7 text-muted" style="font-size:0.8rem">
+                                            <a (click)="navigateToUserPage(comments.userParam)"
+                                                class="ml-1 text-success text-muted cursor"><b><i
+                                                        class="fas fa-user-circle mr-1"></i></b>
+                                                {{comments.userName}}</a>
+                                            <i class="far fa-clock ml-2"></i> <span *ngIf="comments.role === 'expert'"
+                                                class="ml-1 mr-1"><b>{{comments.role}}</b></span> Commented on
+                                            {{comments.createdAt | date:'d/M/y'}}
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="ml-4">{{comments.comment}}</div>
+                                        </div>
+                                        <!-- comment -->
+                                        <!-- reply -->
+
+                                        <div class=" col-md-12 bg-white mt-1 mb-2">
+                                            <a href="#{{comments.commentId}}-1" class="card-link text-dark ml-2"
+                                                (click)="getReply(comments.commentId)" data-toggle="collapse"
+                                                (click)="toggleAction(action = 'reply', comments)"><i
+                                                    class="fas fa-reply"></i> reply {{comments.replayCount}}</a>
+                                        </div>
+                                        <div class="mt-2 col-md-12 collapse hide" id="{{comments.commentId}}-1"
+                                            data-parent="#accordion">
+                                            <div class="col-md-12 ">
+                                                <form #replyForm="ngForm" class="row justify-content-center"
+                                                    (ngSubmit)="reply(replyForm, comments)">
+                                                    <input class="form-control col-9 inputCircle"
+                                                        placeholder="Add Reply" ngModel name="reply">
+                                                    <div class="col-1 ml-4">
+                                                        <button type="submit" class="btn btn-success rounded-circle"><i
+                                                                class="fas fa-reply icon text-white"></i></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- reply -->
+                                            <div class="col-md-12 mt-2">
+                                                <div *ngFor="let replys of replyData" class="mt-1">
+                                                    <div *ngIf="comments.commentId === replys.commentId">
+                                                        <div class="col-md-12 h7 text-muted" style="font-size:0.8rem">
+                                                            <a (click)="navigateToUserPage(replys.userParam)"
+                                                                class="ml-1 text-success text-muted cursor"><b><i
+                                                                        class="fas fa-user-circle mr-1"></i></b>
+                                                                {{replys.userName}}</a>
+                                                            <i class="far fa-clock ml-3 mr-1"></i> <span
+                                                                *ngIf="reply.role === 'expert'"
+                                                                class="ml-1 mr-1"><b>{{reply.role}}</b></span>Replied on
+                                                            {{replys.createdAt | date:'d/M/y'}}
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="ml-4">{{replys.reply}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- reply -->
+                        <!-- share -->
+                        <div id="{{QstDetail.questionId}}-2" class="collapse hide" *ngIf="isLoggedIn"
+                            data-parent="#accordion">
+                            <div class="col-md-12 mt-2 mb-2 p-2 row justify-content-between">
+                                <a class="btn btn-link d-inline ml-4" (click)="shareOnFB(QstDetail)"><i
+                                        class="fab fa-facebook-f"></i> <span class="hide-icons">Facebook</span></a>
+                                <a class="btn btn-link d-inline" (click)="shareOntwitter(QstDetail)"><i
+                                        class="fab fa-twitter"></i> <span class="hide-icons"> Twitter</span> </a>
+                                <a class="btn btn-link d-inline" (click)="shareOnLinkedIn(QstDetail)"><i
+                                        class="fab fa-linkedin-in"></i> <span class="hide-icons"> LinkedIn</span> </a>
+                                <a class="btn btn-link d-inline text-dark"
+                                    href="mailto:?subject= Question on @VerwinCareers:&amp;body=Check out this question: {{QstDetail.question}}, Link: https://www.verwin.com/{{QstDetail.question}}/{{QstDetail.questionId}}"
+                                    title="Share"><i class="far fa-envelope"></i> <span class="hide-icons"> Email</span>
+                                </a>
+                                <a class="btn btn-link d-inline text-dark hide-icons" (click)="whatsappShare(QstDetail)"
+                                    data-action="share/whatsapp/share"><span class="hide-icons"><i
+                                            class="fab fa-whatsapp"></i> whatsapp</span> </a>
+                                <a class="hide-element btn btn-link d-inline text-dark" alt="Whatsapp"
+                                    href="https://wa.me/?text=https://verwin-server-api.herokuapp.com/api/a2a/q2a/meta/{{QstDetail.questionId}}"
+                                    data-text="Text to share"><i class="fab fa-whatsapp"></i></a>
+                                <a class="btn btn-link d-inline link" (click)="copyMessage(QstDetail)"
+                                    value="click to copy"><i class="fas fa-link"></i>
+                                    <span class="hide-icons">copy Link</span> </a>
+                            </div>
+                        </div>
+                        <!-- share -->
+
+                    </div>
+                </div>
+                <!-- <div class="text-center text-muted mt-3 mb-2" *ngIf="expertNotAssigned === false && role === 'expert'"><h3>No questions assigned for you!</h3></div> -->
+                <!-- <div class="text-center text-muted mt-3 mb-2" *ngIf="expertNotAssigned === false && role !== 'expert'"><h3> <i class="fas fa-redo-alt fa-spin"></i> Loading...</h3></div> -->
+            </div>
+
+            <!-- middele pane -->
+            <!-- trending question pane -->
+            <div class="col-3 mt-2">
+                <div class="rigthpane shadow-card p-2 rounded">
+                    <h5>Trending questions</h5>
+                    <div class="ml-3 mt-3 cc">
+                        <div *ngFor="let trendiongQst of trendingQuestion | slice : 0: 5">
+                            <a class="block-ellipsis text-dark"
+                                [routerLink]="['/', trendiongQst.questionParam ]">{{trendiongQst.question  | words : 7}}</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- job carousel right -->
+                <div class="rigthpaneJob shadow-card rounded" style="top: 375px">
+                    <!-- <h4 class="ml-2">Jobs</h4> -->
+                    <div id="carouselExampleControls1" class="carousel slide" data-ride="carousel" data-interval="2000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <!-- <div class="carousel-content col-10 col-centered">
+                                    <div>
+                                        <h4>#1</h4>
+                                        <div class="cc">This is a twitter bootstrap carousel that only uses text. There are no images in the carousel slides.</div>
+                                    </div>
+                                </div> -->
+
+                                    <img class="d-block w-100" src="../assets/images/adBanR.jpg" alt="First slide" style="width: 100%; height: 175px">
+                                    <!-- <img src="../assets/images/CD.jpg" alt="First slide"> -->
+
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="../assets/images/adBanR1.jpg" alt="Second slide" style="width: 100%; height: 175px">
+                                <!-- <div class="carousel-content col-10 col-centered">
+                                    <div>
+                                        <h4>#2</h4>
+                                        <div class="cc">This is a twitter bootstrap carousel that only uses text. There are no images in the carousel slides.</div>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="../assets/images/adBanL.jpg" alt="Third slide" style="width: 100%; height: 175px">
+                                <!-- <div class="carousel-content col-10 col-centered">
+                                    <div>
+                                        <h4>#3</h4>
+                                        <div class="cc">This is a twitter bootstrap carousel that only uses text. There are no images in the carousel slides.</div>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="../assets/images/adBanL1.jpg" alt="Fourth slide" style="width: 100%; height: 175px">
+                            </div>
+                        </div>
+                        <!-- <a class="carousel-control-prev" href="#carouselExampleControls1" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls1" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main pane -->
